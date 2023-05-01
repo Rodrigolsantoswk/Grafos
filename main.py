@@ -17,12 +17,11 @@ def main():
     # print('Passeio completo a partir de A utilizando o método bfs: ', caminhoAbfs, '\n ---------------------')
     grafo.exibirGrafo()'''
 
-    # ------------------ #
     arestas = [(0, 1), (1, 3), (3, 0), (1, 2), (2, 1), (2, 4), (4, 1), (5, 0)]  # define as arestas
     grafo = Grafo(arestas, direcionado=True)  # cria o grafo e informa se é direcionado ou não
     print('Grafo: ', grafo.adj)  # exibe o grafo em forma de lista de adjacências
     # verifica o caminho para percorrer o grafo (Passeio) através do algorítmo depth-first search
-    caminho0dfs = grafo.dfs(5)
+    caminho0dfs = grafo.dfs(0)
     print('Passeio completo a partir de A utilizando o método dfs: ', caminho0dfs, '\n --------------------')
     # caminho0bfs = grafo.bfs(0)  # verifica o caminho para percorrer o grafo (Passeio) através do algorítmo
     #                             # breadth-first search
@@ -34,7 +33,12 @@ def main():
     grafo.imprimirMatriz(grafo.gerarMatrizAlcancabilidade(3), 'gerarMatrizAlcancabilidade')
 
     # verifica a alcançabilidade entre dois vértices
-    print('Verificar alcançabilidade de 1 para 1: ', grafo.verificarAlcancabilidade(1, 5))
+    v1, v2 = 1, 0
+    print(f'Verificar alcançabilidade de {v1} para {v2}: ', grafo.verificarAlcancabilidade(v1, v2))
+
+    print(f'verifica caminho - dfs_caminho entre {v1} e {v2}: ', grafo.dfs_caminho_sem_repeticao(v1, v2))
+
+    # printa o grafico usando networkx e matplotlib
     grafo.exibirGrafo()
 
 

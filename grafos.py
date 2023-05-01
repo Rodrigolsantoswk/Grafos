@@ -39,7 +39,7 @@ class Grafo(object):
         """ Existe uma aresta entre os vértices 'u' e 'v'? """
         return u in self.adj and v in self.adj[u]
 
-    def __len__(self):
+    def __len__ (self):
         return len(self.adj)
 
     def __str__(self):
@@ -71,12 +71,13 @@ class Grafo(object):
 
     def dfs(self, inicio, visitados=None, caminho=None):
         # depth-first search
+        # inicializa as listas visitados e caminho
         if visitados is None:
             visitados = []
         if caminho is None:
             caminho = []
-        visitados.append(inicio)  # adiciona o vértice inicial aos visitado.
-        caminho.append(inicio)  # adiciona o vértice inicial ao caminho.
+        visitados.append(inicio)  # adiciona o vértice aos visitado.
+        caminho.append(inicio)  # adiciona o vértice ao caminho.
         print('Método: dfs - visitados: ', visitados)
         print('Método: dfs - caminho: ', caminho)
         # print('Inicio: ', inicio, self.adj[inicio])
@@ -84,6 +85,21 @@ class Grafo(object):
             if vizinho not in visitados:
                 self.dfs(vizinho, visitados, caminho)
         return caminho
+
+    def dfs_caminho_sem_repeticao(self, inicio, fim, caminho=None):
+        if caminho is None:
+            caminho = []
+        caminho = caminho + [inicio]
+        if inicio == fim:
+            return caminho
+        if inicio not in self.adj:
+            return None
+        for vertice in self.adj[inicio]:
+            if vertice not in caminho:
+                novo_caminho = self.dfs_caminho_sem_repeticao(vertice, fim, caminho)
+                if novo_caminho:
+                    return novo_caminho
+        return None
 
     def bfs(self, inicio):
         # breadth-first search
@@ -140,7 +156,7 @@ class Grafo(object):
         if tamanho <= 2:
             return False
         else:
-            dist = 2
+            dist = 1
             posA = self.posicao_vertice(a)
             posB = self.posicao_vertice(b)
             while True:
