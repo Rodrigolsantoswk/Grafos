@@ -39,7 +39,7 @@ class Grafo(object):
         """ Existe uma aresta entre os vértices 'u' e 'v'? """
         return u in self.adj and v in self.adj[u]
 
-    def __len__ (self):
+    def __len__(self):
         return len(self.adj)
 
     def __str__(self):
@@ -166,3 +166,9 @@ class Grafo(object):
                 elif dist >= tamanho:
                     return 0, 'O vértice não é alcançável'
                 dist += 1
+
+    def menorCaminho(self, a, b):
+        G = nx.DiGraph(self.adj)
+
+        return nx.shortest_path(G, a, b)
+

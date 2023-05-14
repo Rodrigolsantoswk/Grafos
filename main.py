@@ -18,6 +18,7 @@ def main():
     grafo.exibirGrafo()'''
 
     arestas = [(0, 1), (1, 3), (3, 0), (1, 2), (2, 1), (2, 4), (4, 1), (5, 0)]  # define as arestas
+    # arestas = [(1, 2), (2, 3), (2, 4), (2, 5), (2, 1), (5, 2), (3, 2), (4, 2)]  # define as arestas
     grafo = Grafo(arestas, direcionado=True)  # cria o grafo e informa se é direcionado ou não
     print('Grafo: ', grafo.adj)  # exibe o grafo em forma de lista de adjacências
     # verifica o caminho para percorrer o grafo (Passeio) através do algorítmo depth-first search
@@ -33,12 +34,11 @@ def main():
     grafo.imprimirMatriz(grafo.gerarMatrizAlcancabilidade(3), 'gerarMatrizAlcancabilidade')
 
     # verifica a alcançabilidade entre dois vértices
-    v1, v2 = 1, 0
+    v1, v2 = 1, 4
     print(f'Verificar alcançabilidade de {v1} para {v2}: ', grafo.verificarAlcancabilidade(v1, v2))
-
     print(f'verifica caminho - dfs_caminho entre {v1} e {v2}: ', grafo.dfs_caminho_sem_repeticao(v1, v2))
+    print(f'Verifica menor caminho - entre {v1} e {v2}', grafo.menorCaminho(v1, v2))
 
-    # printa o grafico usando networkx e matplotlib
     grafo.exibirGrafo()
 
 
