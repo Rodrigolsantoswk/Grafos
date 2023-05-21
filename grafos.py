@@ -1,4 +1,4 @@
-from collections import defaultdict, deque
+from collections import defaultdict, deque, Counter
 import networkx as nx
 import matplotlib.pyplot as plt
 import pprint as pp
@@ -6,11 +6,38 @@ import numpy as np
 
 
 # https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/representacao-grafos/
+
+def bubblesortListaComPeso(lista):
+    tam = len(lista)
+    for i in range(tam - 1):
+        for j in range(0, tam - i - 1):
+            if lista[j][2] > lista[j + 1][2]:  # Compara se o próx. vértice tem peso maior
+                lista[j], lista[j + 1] = lista[j + 1], lista[j]  # Troca o próximo elemento com o atual
+    return lista
+
+
+def chavesDuplicadas(dicionario):
+    contador = Counter([frozenset(chave) for chave in dicionario.keys()])
+    return [list(chave) for chave, count in contador.items() if count > 1]
+
+
+# Função para modificar os valores das chaves duplicadas
+def modificarValoresDuplicados(dicionario):
+    duplicados = chavesDuplicadas(dicionario)
+    for dup in duplicados:
+        valores_duplicados = [dicionario[chave] for chave in dicionario if set(chave) == set(dup)]
+        for chave in dicionario:
+            if set(chave) == set(dup):
+                dicionario[chave] = valores_duplicados
+    return dicionario
+
+
 class Grafo(object):
     """ Implementação básica de um grafo. """
 
     def __init__(self, arestas, direcionado=False):
         """Inicializa as estruturas base do grafo."""
+        self.lista = arestas
         self.adj = defaultdict(set)
         self.direcionado = direcionado
         self.adiciona_arestas(arestas)
@@ -20,20 +47,24 @@ class Grafo(object):
         return list(self.adj.keys())
 
     def get_arestas(self):
-        """ Retorna a lista de arestas do grafo. """
-        return [(k, v) for k in self.adj.keys() for v in self.adj[k]]
+        """ Retorna a lista de arestas do grafo. (Vertice1, Vertice2, Peso)"""
+        arestas = []
+        for vertice1, vizinhos in self.adj.items():
+            for vertice2, peso in vizinhos:
+                arestas.append((vertice1, vertice2, peso))
+        return arestas
 
     def adiciona_arestas(self, arestas):
         """ Adiciona arestas ao grafo. """
-        for u, v in arestas:
-            self.adiciona_arco(u, v)
+        for u, v, peso in arestas:
+            self.adiciona_arco(u, v, peso)
 
-    def adiciona_arco(self, u, v):
-        """ Adiciona uma ligação (arco) entre os nodos 'u' e 'v'. """
-        self.adj[u].add(v)
+    def adiciona_arco(self, u, v, peso):
+        """ Adiciona uma ligação (arco) entre os nodos 'u' e 'v' com um peso especificado. """
+        self.adj[u].add((v, peso))
         # Se o grafo é não-direcionado, precisamos adicionar arcos nos dois sentidos.
         if not self.direcionado:
-            self.adj[v].add(u)
+            self.adj[v].add((u, peso))
 
     def existe_aresta(self, u, v):
         """ Existe uma aresta entre os vértices 'u' e 'v'? """
@@ -50,11 +81,16 @@ class Grafo(object):
 
     # fim da implementação da classe gerada por algoritmosempython
     def exibirGrafo(self):
-        # https://networkx.org/documentation/stable/reference/generated/networkx.drawing.layout.spring_layout.html#spring-layout
-        # Este método utiliza as bibliotecas networkx e matplotlib para plotar o grafo.
-        G = nx.DiGraph(self.adj)
-        pos = nx.spring_layout(G)  # Fruchterman-Reingold.
+        G = nx.DiGraph()
+        for u, vizinhos in self.adj.items():
+            for v, peso in vizinhos:
+                G.add_edge(u, v, weight=peso)
+
+        pos = nx.spring_layout(G)
+        labels = nx.get_edge_attributes(G, 'weight')  # Obtém os pesos das arestas
+        labels = modificarValoresDuplicados(labels)
         nx.draw(G, pos, with_labels=True)
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)  # Adiciona os pesos nas arestas
         plt.show()
 
     def posicao_vertice(self, vertice):
@@ -81,7 +117,8 @@ class Grafo(object):
         print('Método: dfs - visitados: ', visitados)
         print('Método: dfs - caminho: ', caminho)
         # print('Inicio: ', inicio, self.adj[inicio])
-        for vizinho in self.adj[inicio]:
+        for vizinhog in self.adj[inicio]:
+            vizinho = vizinhog[0]  # Necessário para desconsiderar o peso.
             if vizinho not in visitados:
                 self.dfs(vizinho, visitados, caminho)
         return caminho
@@ -94,7 +131,8 @@ class Grafo(object):
             return caminho
         if inicio not in self.adj:
             return None
-        for vertice in self.adj[inicio]:
+        for verticeg in self.adj[inicio]:
+            vertice = verticeg[0]  # Necessário para desconsiderar o peso.
             if vertice not in caminho:
                 novo_caminho = self.dfs_caminho_sem_repeticao(vertice, fim, caminho)
                 if novo_caminho:
@@ -138,7 +176,8 @@ class Grafo(object):
         matriz = [[0 for j in range(n)] for i in range(n)]
         for i in self.adj:
             for j in self.adj[i]:
-                matriz[i][j] = 1
+
+                matriz[i][j[0]] = 1
         return matriz
 
     # Este método vai retornar a multiplicação da matriz de adjacência, sendo esta a matriz de alcançabilidade
@@ -167,8 +206,26 @@ class Grafo(object):
                     return 0, 'O vértice não é alcançável'
                 dist += 1
 
-    def menorCaminho(self, a, b):
-        G = nx.DiGraph(self.adj)
+    # Utilizando o algoritmo bubble sort para ordenar a lista
+    def getKruskal(self):
+        listaOrdenada = bubblesortListaComPeso(self.lista)
+        print(listaOrdenada)
+        visitados = [listaOrdenada[0][0]]
+        arvore = defaultdict(set)
+        for i in listaOrdenada:
+            if i[1] in visitados:
+                pass
+            else:
+                visitados.append(i[1])
 
+
+
+    def menorCaminho(self, a, b):
+        G = nx.DiGraph()
+        # Declarando o grafo utilizando a biblioteca networkx
+        for v1, vizinhos in self.adj.items():
+            for v2, peso in vizinhos:
+                G.add_edge(v1, v2, weight=peso)  # A biblioteca recebe o peso da aresta com o atributo "weight"
         return nx.shortest_path(G, a, b)
+
 

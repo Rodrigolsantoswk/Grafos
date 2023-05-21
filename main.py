@@ -17,10 +17,13 @@ def main():
     # print('Passeio completo a partir de A utilizando o método bfs: ', caminhoAbfs, '\n ---------------------')
     grafo.exibirGrafo()'''
 
-    arestas = [(0, 1), (1, 3), (3, 0), (1, 2), (2, 1), (2, 4), (4, 1), (5, 0)]  # define as arestas
+    # arestas = [(0, 1), (1, 3), (3, 0), (1, 2), (2, 1), (2, 4), (4, 1), (5, 0)]  # define as arestas
     # arestas = [(1, 2), (2, 3), (2, 4), (2, 5), (2, 1), (5, 2), (3, 2), (4, 2)]  # define as arestas
+    arestas = [(0, 1, 2), (1, 2, 3), (1, 3, 1), (3, 0, 4), (2, 1, 5), (2, 4, 2), (4, 1, 3), (5, 0, 1)]  # Define restas com peso
     grafo = Grafo(arestas, direcionado=True)  # cria o grafo e informa se é direcionado ou não
     print('Grafo: ', grafo.adj)  # exibe o grafo em forma de lista de adjacências
+    print('Arestas: (Vértice 1, Vértice 2, Peso)', grafo.get_arestas())  # Exibe arestas do grafo
+    '''
     # verifica o caminho para percorrer o grafo (Passeio) através do algorítmo depth-first search
     caminho0dfs = grafo.dfs(0)
     print('Passeio completo a partir de A utilizando o método dfs: ', caminho0dfs, '\n --------------------')
@@ -39,6 +42,9 @@ def main():
     print(f'verifica caminho - dfs_caminho entre {v1} e {v2}: ', grafo.dfs_caminho_sem_repeticao(v1, v2))
     print(f'Verifica menor caminho - entre {v1} e {v2}', grafo.menorCaminho(v1, v2))
 
+    
+    '''
+    print(grafo.getKruskal())
     grafo.exibirGrafo()
 
 
