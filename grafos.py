@@ -32,6 +32,21 @@ def modificarValoresDuplicados(dicionario):
     return dicionario
 
 
+# Exibir grafo recebendo uma lista externa:
+def exibirGrafo(grafo):
+    G = nx.DiGraph()
+    for u, vizinhos in grafo.items():
+        for v, peso in vizinhos:
+            G.add_edge(u, v, weight=peso)
+
+    pos = nx.spring_layout(G)
+    labels = nx.get_edge_attributes(G, 'weight')
+
+    nx.draw(G, pos, with_labels=True, arrows=True)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+    plt.show()
+
+
 class Grafo(object):
     """ Implementação básica de um grafo. """
 
@@ -89,6 +104,7 @@ class Grafo(object):
         pos = nx.spring_layout(G)
         labels = nx.get_edge_attributes(G, 'weight')  # Obtém os pesos das arestas
         labels = modificarValoresDuplicados(labels)
+
         nx.draw(G, pos, with_labels=True)
         nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)  # Adiciona os pesos nas arestas
         plt.show()
@@ -206,20 +222,27 @@ class Grafo(object):
                     return 0, 'O vértice não é alcançável'
                 dist += 1
 
-    # Utilizando o algoritmo bubble sort para ordenar a lista
+    # Utilizando o algoritmo bubble sort para ordenar a lista e retornando árvore geradora ascendente
     def getKruskal(self):
         listaOrdenada = bubblesortListaComPeso(self.lista)
         print(listaOrdenada)
-        visitados = [listaOrdenada[0][0]]
+        visitados = []
+        # print('visitados: ', visitados)
         arvore = defaultdict(set)
+        qVertices = len(self.get_vertices())
+        count = 0
         for i in listaOrdenada:
-            if i[1] in visitados:
+            if i[1] in visitados or count > qVertices:
                 pass
             else:
                 visitados.append(i[1])
+                print(visitados)
+                arvore[i[0]].add((i[1], i[2]))
+            count += 1
+        exibirGrafo(arvore)
+        return arvore
 
-
-
+    # Verifica o menor caminho usando a biblioteca networkx
     def menorCaminho(self, a, b):
         G = nx.DiGraph()
         # Declarando o grafo utilizando a biblioteca networkx

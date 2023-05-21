@@ -3,19 +3,21 @@ from grafos import Grafo
 
 def main():
     # https://algoritmosempython.com.br/cursos/algoritmos-python/algoritmos-grafos/representacao-grafos/
-    '''arestas = [('A', 'B'), ('B', 'C'), ('B', 'D'), ('C', 'B'), ('C', 'E'), ('D', 'A'), ('E', 'B')]
-    # Cria e imprime o grafo.
-    grafo = Grafo(arestas, direcionado=True)
-    print('Grafo: ', grafo.adj)
-    print('Vértices: ', grafo.get_vertices())
-    print('Arestas: ', grafo.get_arestas())
-    print('Existe aresta - A, B: ', grafo.existe_aresta('A', 'B'), '\n \t \t \t \t E, C: ', grafo.existe_aresta('E', 'C'))
-    # fim da implementação da classe gerada por algoritmosempython
-    caminhoAdfs = grafo.dfs('A')
-    print('Passeio completo a partir de A utilizando o método dfs: ', caminhoAdfs, '\n --------------------')
-    # caminhoAbfs = grafo.bfs('A')
-    # print('Passeio completo a partir de A utilizando o método bfs: ', caminhoAbfs, '\n ---------------------')
-    grafo.exibirGrafo()'''
+    """
+        arestas = [('A', 'B'), ('B', 'C'), ('B', 'D'), ('C', 'B'), ('C', 'E'), ('D', 'A'), ('E', 'B')]
+        # Cria e imprime o grafo.
+        grafo = Grafo(arestas, direcionado=True)
+        print('Grafo: ', grafo.adj)
+        print('Vértices: ', grafo.get_vertices())
+        print('Arestas: ', grafo.get_arestas())
+        print('Existe aresta - A, B: ', grafo.existe_aresta('A', 'B'), '\n \t \t \t \t E, C: ', grafo.existe_aresta('E', 'C'))
+        # fim da implementação da classe gerada por algoritmosempython
+        caminhoAdfs = grafo.dfs('A')
+        print('Passeio completo a partir de A utilizando o método dfs: ', caminhoAdfs, '\n --------------------')
+        # caminhoAbfs = grafo.bfs('A')
+        # print('Passeio completo a partir de A utilizando o método bfs: ', caminhoAbfs, '\n ---------------------')
+        grafo.exibirGrafo()
+    """
 
     # arestas = [(0, 1), (1, 3), (3, 0), (1, 2), (2, 1), (2, 4), (4, 1), (5, 0)]  # define as arestas
     # arestas = [(1, 2), (2, 3), (2, 4), (2, 5), (2, 1), (5, 2), (3, 2), (4, 2)]  # define as arestas
