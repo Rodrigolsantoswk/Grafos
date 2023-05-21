@@ -1,4 +1,4 @@
-from grafos import Grafo
+from grafos import Grafo, exibirGrafo
 
 
 def main():
@@ -43,10 +43,9 @@ def main():
     print(f'Verificar alcançabilidade de {v1} para {v2}: ', grafo.verificarAlcancabilidade(v1, v2))
     print(f'verifica caminho - dfs_caminho entre {v1} e {v2}: ', grafo.dfs_caminho_sem_repeticao(v1, v2))
     print(f'Verifica menor caminho - entre {v1} e {v2}', grafo.menorCaminho(v1, v2))
-
-    
     '''
-    print(grafo.getKruskal())
+    arvore = grafo.getKruskal()
+    exibirGrafo(arvore)
     grafo.exibirGrafo()
 
 

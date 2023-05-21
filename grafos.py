@@ -239,7 +239,7 @@ class Grafo(object):
                 print(visitados)
                 arvore[i[0]].add((i[1], i[2]))
             count += 1
-        exibirGrafo(arvore)
+
         return arvore
 
     # Verifica o menor caminho usando a biblioteca networkx
@@ -250,5 +250,3 @@ class Grafo(object):
             for v2, peso in vizinhos:
                 G.add_edge(v1, v2, weight=peso)  # A biblioteca recebe o peso da aresta com o atributo "weight"
         return nx.shortest_path(G, a, b)
-
-
