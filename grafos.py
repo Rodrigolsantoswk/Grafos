@@ -1,4 +1,4 @@
-from collections import defaultdict, deque, Counter
+from collections import defaultdict, deque, Counter, OrderedDict
 import networkx as nx
 import matplotlib.pyplot as plt
 import pprint as pp
@@ -256,14 +256,31 @@ class Grafo(object):
                 G.add_edge(v1, v2, weight=peso)  # A biblioteca recebe o peso da aresta com o atributo "weight"
         return nx.shortest_path(G, a, b)
 
+    def vgc(self):  # Retorna os vértices ordenados por grau crescente.
+        graus = {}  # Dicionário para armazenar o grau de cada vértice
+
+        # Calcular o grau de cada vértice
+        for v in self.adj:
+            grau = sum(len(adjacencias) for adjacencias in self.adj[v])
+            graus[v] = grau
+
+        # Ordenar os vértices com base em seus graus
+        vertices_ordenados = OrderedDict(sorted(graus.items(), key=lambda x: x[1]))
+
+        # Criar um defaultdict ordenado com o mesmo conteúdo do grafo original
+        grafo_ordenado = defaultdict(set)
+        for v in vertices_ordenados:
+            grafo_ordenado[v] = self.adj[v]
+
+        return grafo_ordenado
+
     # Retorna o conjunto maximal do grafo
     def maximal(self):
         verticesMaximais = set()
-
-        for vertice in self.adj:  # para cada vértice no grafo, partindo do primeiro vértice de self.adj.
+        for vertice in self.vgc():  # para cada vértice no grafo, partindo do primeiro vértice de self.adj.
             isMaximal = True
             for v in verticesMaximais:
-                vizinhos_v = {vizinho for vizinho, _ in self.adj[v]}   # verifica todos os vizinhos do vertice
+                vizinhos_v = {vizinho for vizinho, _ in self.adj[v]}  # verifica todos os vizinhos do vertice
                 print(vizinhos_v, v)
                 if vertice in vizinhos_v:  # Se o vértice está entre os vizinhos, não é maximal
                     isMaximal = False
@@ -271,12 +288,13 @@ class Grafo(object):
             if isMaximal:
                 verticesMaximais.add(vertice)
         aux = []
-
-        for i in tuple(verticesMaximais):  # Em casos de grafos direcionados, é necessário varrer o resultado e
-            # remover os vértices que tem arestas em comum porém não foram verificados anteriormente.
+        # Em casos de grafos direcionados, é necessário varrer o resultado e
+        # remover os vértices que tem arestas em comum porém não foram verificados anteriormente.
+        for i in tuple(verticesMaximais):
             for j in self.adj[i]:
                 aux.append(j[0])
                 for k in aux:
                     if k in verticesMaximais:
                         verticesMaximais.remove(k)
         return verticesMaximais
+
