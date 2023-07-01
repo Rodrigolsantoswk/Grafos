@@ -69,6 +69,12 @@ class Grafo(object):
                 arestas.append((vertice1, vertice2, peso))
         return arestas
 
+    def get_peso(self, vertice_origem, vertice_destino):
+        for vizinho, peso in self.adj[vertice_origem]:
+            if vizinho == vertice_destino:
+                return peso
+        return None
+
     def adiciona_arestas(self, arestas):
         """ Adiciona arestas ao grafo. """
         for u, v, peso in arestas:
@@ -192,7 +198,6 @@ class Grafo(object):
         matriz = [[0 for j in range(n)] for i in range(n)]
         for i in self.adj:
             for j in self.adj[i]:
-
                 matriz[i][j[0]] = 1
         return matriz
 
@@ -250,3 +255,28 @@ class Grafo(object):
             for v2, peso in vizinhos:
                 G.add_edge(v1, v2, weight=peso)  # A biblioteca recebe o peso da aresta com o atributo "weight"
         return nx.shortest_path(G, a, b)
+
+    # Retorna o conjunto maximal do grafo
+    def maximal(self):
+        verticesMaximais = set()
+
+        for vertice in self.adj:  # para cada vértice no grafo, partindo do primeiro vértice de self.adj.
+            isMaximal = True
+            for v in verticesMaximais:
+                vizinhos_v = {vizinho for vizinho, _ in self.adj[v]}   # verifica todos os vizinhos do vertice
+                print(vizinhos_v, v)
+                if vertice in vizinhos_v:  # Se o vértice está entre os vizinhos, não é maximal
+                    isMaximal = False
+                    break
+            if isMaximal:
+                verticesMaximais.add(vertice)
+        aux = []
+
+        for i in tuple(verticesMaximais):  # Em casos de grafos direcionados, é necessário varrer o resultado e
+            # remover os vértices que tem arestas em comum porém não foram verificados anteriormente.
+            for j in self.adj[i]:
+                aux.append(j[0])
+                for k in aux:
+                    if k in verticesMaximais:
+                        verticesMaximais.remove(k)
+        return verticesMaximais

@@ -21,10 +21,10 @@ def main():
 
     # arestas = [(0, 1), (1, 3), (3, 0), (1, 2), (2, 1), (2, 4), (4, 1), (5, 0)]  # define as arestas
     # arestas = [(1, 2), (2, 3), (2, 4), (2, 5), (2, 1), (5, 2), (3, 2), (4, 2)]  # define as arestas
-    arestas = [(0, 1, 2), (1, 2, 3), (1, 3, 1), (3, 0, 4), (2, 1, 5), (2, 4, 2), (4, 1, 3), (5, 0, 1)]  # Define restas com peso
+    arestas = [(0, 1, 2), (1, 2, 3), (1, 3, 1), (3, 0, 4), (2, 1, 5), (2, 4, 2), (4, 1, 3), (5, 0, 1), (6, 3, 1), (3, 6, 2), (6, 1, 2), (1,6,1)]  # Define restas com peso
     grafo = Grafo(arestas, direcionado=True)  # cria o grafo e informa se é direcionado ou não
     print('Grafo: ', grafo.adj)  # exibe o grafo em forma de lista de adjacências
-    print('Arestas: (Vértice 1, Vértice 2, Peso)', grafo.get_arestas())  # Exibe arestas do grafo
+    # print('Arestas: (Vértice 1, Vértice 2, Peso)', grafo.get_arestas())  # Exibe arestas do grafo
     '''
     # verifica o caminho para percorrer o grafo (Passeio) através do algorítmo depth-first search
     caminho0dfs = grafo.dfs(0)
@@ -45,8 +45,11 @@ def main():
     print(f'Verifica menor caminho - entre {v1} e {v2}', grafo.menorCaminho(v1, v2))
     '''
     arvore = grafo.getKruskal()
-    exibirGrafo(arvore)
+    # exibirGrafo(arvore)
     grafo.exibirGrafo()
+    print('maximal: ', grafo.maximal())
+
+    # print('menorCaminho(): ', grafo.menorCaminho(5, 2))
 
 
 if __name__ == '__main__':
