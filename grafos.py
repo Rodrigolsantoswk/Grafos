@@ -1,4 +1,6 @@
 from collections import defaultdict, deque, Counter, OrderedDict
+import random
+
 import networkx as nx
 import matplotlib.pyplot as plt
 import pprint as pp
@@ -56,6 +58,11 @@ class Grafo(object):
         self.adj = defaultdict(set)
         self.direcionado = direcionado
         self.adiciona_arestas(arestas)
+        self.lista_de_cores = ['aqua', 'red', 'green', 'yellow', 'orange', 'purple', 'pink', 'brown', 'gray', 'cyan',
+                               'magenta', 'lime', 'teal', 'olive', 'navy', 'maroon', 'indigo', 'silver', 'gold',
+                               'coral', 'orchid', 'turquoise', 'salmon', 'sienna', 'thistle', 'violet', 'wheat', 'plum',
+                               'steelblue'
+                               ]
 
     def get_vertices(self):
         """ Retorna a lista de vértices do grafo. """
@@ -112,6 +119,22 @@ class Grafo(object):
         labels = modificarValoresDuplicados(labels)
 
         nx.draw(G, pos, with_labels=True)
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)  # Adiciona os pesos nas arestas
+        plt.show()
+
+    # fim da implementação da classe gerada por algoritmosempython
+    def exibirGrafo(self, cores):
+        G = nx.DiGraph()
+        for u, vizinhos in self.adj.items():
+            for v, peso in vizinhos:
+                G.add_edge(u, v, weight=peso)
+
+        pos = nx.spring_layout(G)
+        labels = nx.get_edge_attributes(G, 'weight')  # Obtém os pesos das arestas
+        labels = modificarValoresDuplicados(labels)
+        node_colors = [cores[vertice] for vertice in G.nodes()]  # Obtém as cores dos vértices
+
+        nx.draw(G, pos, with_labels=True, node_color=node_colors)  # Usa as cores dos vértices
         nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)  # Adiciona os pesos nas arestas
         plt.show()
 
@@ -298,3 +321,27 @@ class Grafo(object):
                         verticesMaximais.remove(k)
         return verticesMaximais
 
+    def checarCores(self):
+        cores = {}  # Dicionário para armazenar as cores atribuídas a cada vértice
+        cores_disponiveis = self.lista_de_cores  # Lista de cores disponíveis
+
+        for vertice in self.adj:  # para cada vértice no grafo
+            vizinhos_cores = set()  # Conjunto de cores dos vizinhos
+            print('vértice> ', vertice)
+            for vizinho in self.adj[vertice]:
+                if vizinho[0] in cores:  # Verifica se o vizinho já possui uma cor atribuída
+                    vizinhos_cores.add(cores[vizinho[0]])
+                    print('vizinho: ', vizinho[0], '\tvizinho_cores: ', vizinhos_cores, '\tcores[vizinho[0]]: '
+                          , cores[vizinho[0]])
+
+            for cor in cores_disponiveis:
+                '''
+                    Se a cor não está presente nos vizinhos, atribui ao vértice
+                    Caso a cor não esteja nos vizinhos significa que posso adicioná-la no vértice
+                '''
+                if cor not in vizinhos_cores:
+                    cores[vertice] = cor
+                    print('cores: ', cores)
+                    break
+
+        return cores
